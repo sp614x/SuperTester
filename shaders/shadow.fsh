@@ -4,21 +4,21 @@
 #define NOTHING 0
 #define LMCOORD 1
 #define LIGHTMAP 2
-#define GL_NORMAL 3
-#define GL_NORMALMATRIX 4
+#define GLX_NORMAL 3
+#define GLX_NORMALMATRIX 4
 #define MC_MIDTEXCOORD 5
 #define AT_TANGENT 6
 #define NUMERIC_ID 7
-#define GL_COLOR 8
+#define GLX_COLOR 8
 #define NORMALS_TEXTURE 9
 #define SPECULAR_TEXTURE 10
-#define GL_VERTEX 11
+#define GLX_VERTEX 11
 #define PLAYER_POS 12
 #define WORLD_POS 13
 #define VIEW_POS 14
 #define SHADOW_VIEW_POS 15
 #define SHADOW_SAMPLE_POS 16
-#define SHADOW_DEBUG NOTHING //What to draw in the shadow program [NOTHING LMCOORD LIGHTMAP GL_NORMAL GL_NORMALMATRIX MC_MIDTEXCOORD AT_TANGENT NUMERIC_ID GL_COLOR NORMALS_TEXTURE SPECULAR_TEXTURE GL_VERTEX PLAYER_POS WORLD_POS VIEW_POS SHADOW_VIEW_POS SHADOW_SAMPLE_POS]  
+#define SHADOW_DEBUG NOTHING //What to draw in the shadow program [NOTHING LMCOORD LIGHTMAP GLX_NORMAL GLX_NORMALMATRIX MC_MIDTEXCOORD AT_TANGENT NUMERIC_ID GLX_COLOR NORMALS_TEXTURE SPECULAR_TEXTURE GLX_VERTEX PLAYER_POS WORLD_POS VIEW_POS SHADOW_VIEW_POS SHADOW_SAMPLE_POS]  
 #define COLOR_WEIGHT 0.75 //Mix level which combines the grayscale texture with the thing being debugged [0.0 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00]
 
 uniform sampler2D lightmap;
@@ -55,9 +55,9 @@ void main() {
 		debug = vec3(lmcoord, 0.0);
 	#elif SHADOW_DEBUG == LIGHTMAP
 		debug = texture2D(lightmap, lmcoord).rgb;
-	#elif SHADOW_DEBUG == GL_NORMAL
+	#elif SHADOW_DEBUG == GLX_NORMAL
 		debug = normal * 0.5 + 0.5;
-	#elif SHADOW_DEBUG == GL_NORMALMATRIX
+	#elif SHADOW_DEBUG == GLX_NORMALMATRIX
 		debug = rotatedNormal * 0.5 + 0.5;
 	#elif SHADOW_DEBUG == MC_MIDTEXCOORD
 		debug = vec3(midcoord, 0.0);
@@ -71,13 +71,13 @@ void main() {
 		id >>= 4;
 		float red = (id & 15) / 15.0;
 		debug = vec3(red, green, blue);
-	#elif SHADOW_DEBUG == GL_COLOR
+	#elif SHADOW_DEBUG == GLX_COLOR
 		debug = glcolor.rgb;
 	#elif SHADOW_DEBUG == NORMALS_TEXTURE
 		debug = texture2D(normals, texcoord).rgb;
 	#elif SHADOW_DEBUG == SPECULAR_TEXTURE
 		debug = texture2D(specular, texcoord).rgb;
-	#elif SHADOW_DEBUG == GL_VERTEX
+	#elif SHADOW_DEBUG == GLX_VERTEX
 		debug = glvertex / 16.0;
 	#elif SHADOW_DEBUG == PLAYER_POS
 		debug = playerPos;

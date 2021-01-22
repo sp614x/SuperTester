@@ -7,9 +7,9 @@ vec3 debug;
 	debug = vec3(lmcoord, 0.0);
 #elif GBUFFER_DEBUG == LIGHTMAP
 	debug = texture2D(lightmap, lmcoord).rgb;
-#elif GBUFFER_DEBUG == GL_NORMAL
+#elif GBUFFER_DEBUG == GLX_NORMAL
 	debug = normal * 0.5 + 0.5;
-#elif GBUFFER_DEBUG == GL_NORMALMATRIX
+#elif GBUFFER_DEBUG == GLX_NORMALMATRIX
 	debug = rotatedNormal * 0.5 + 0.5;
 #elif GBUFFER_DEBUG == MC_MIDTEXCOORD
 	debug = vec3(midcoord, 0.0);
@@ -23,13 +23,13 @@ vec3 debug;
 	id >>= 4;
 	float red = (id & 15) / 15.0;
 	debug = vec3(red, green, blue);
-#elif GBUFFER_DEBUG == GL_COLOR
+#elif GBUFFER_DEBUG == GLX_COLOR
 	debug = glcolor.rgb;
 #elif GBUFFER_DEBUG == NORMALS_TEXTURE
 	debug = texture2D(normals, texcoord).rgb;
 #elif GBUFFER_DEBUG == SPECULAR_TEXTURE
 	debug = texture2D(specular, texcoord).rgb;
-#elif GBUFFER_DEBUG == GL_VERTEX
+#elif GBUFFER_DEBUG == GLX_VERTEX
 	debug = glvertex / 16.0;
 #elif GBUFFER_DEBUG == PLAYER_POS
 	debug = playerPos;
