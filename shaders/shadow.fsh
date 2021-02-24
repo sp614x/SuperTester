@@ -8,17 +8,18 @@
 #define GLX_NORMALMATRIX 4
 #define MC_MIDTEXCOORD 5
 #define AT_TANGENT 6
-#define NUMERIC_ID 7
-#define GLX_COLOR 8
-#define NORMALS_TEXTURE 9
-#define SPECULAR_TEXTURE 10
-#define GLX_VERTEX 11
-#define PLAYER_POS 12
-#define WORLD_POS 13
-#define VIEW_POS 14
-#define SHADOW_VIEW_POS 15
-#define SHADOW_SAMPLE_POS 16
-#define SHADOW_DEBUG NOTHING //What to draw in the shadow program [NOTHING LMCOORD LIGHTMAP GLX_NORMAL GLX_NORMALMATRIX MC_MIDTEXCOORD AT_TANGENT NUMERIC_ID GLX_COLOR NORMALS_TEXTURE SPECULAR_TEXTURE GLX_VERTEX PLAYER_POS WORLD_POS VIEW_POS SHADOW_VIEW_POS SHADOW_SAMPLE_POS]  
+#define AT_TANGENTMATRIX 7
+#define NUMERIC_ID 8
+#define GLX_COLOR 9
+#define NORMALS_TEXTURE 10
+#define SPECULAR_TEXTURE 11
+#define GLX_VERTEX 12
+#define PLAYER_POS 13
+#define WORLD_POS 14
+#define VIEW_POS 15
+#define SHADOW_VIEW_POS 16
+#define SHADOW_SAMPLE_POS 17
+#define SHADOW_DEBUG NOTHING //What to draw in the shadow program [NOTHING LMCOORD LIGHTMAP GLX_NORMAL GLX_NORMALMATRIX MC_MIDTEXCOORD AT_TANGENT AT_TANGENTMATRIX NUMERIC_ID GLX_COLOR NORMALS_TEXTURE SPECULAR_TEXTURE GLX_VERTEX PLAYER_POS WORLD_POS VIEW_POS SHADOW_VIEW_POS SHADOW_SAMPLE_POS]  
 #define COLOR_WEIGHT 0.75 //Mix level which combines the grayscale texture with the thing being debugged [0.0 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00]
 
 uniform sampler2D lightmap;
@@ -35,6 +36,7 @@ varying vec2 texcoord;
 varying vec3 normal;
 varying vec3 rotatedNormal;
 varying vec3 tangent;
+varying vec3 tangentMatrix;
 
 varying vec3 glvertex;
 varying vec3 playerPos;

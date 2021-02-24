@@ -22,6 +22,7 @@ varying vec2 texcoord;
 varying vec3 normal;
 varying vec3 rotatedNormal;
 varying vec3 tangent;
+varying vec3 tangentMatrix;
 
 varying vec3 glvertex;
 varying vec3 playerPos;

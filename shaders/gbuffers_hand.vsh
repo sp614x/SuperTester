@@ -16,6 +16,7 @@ varying vec2 texcoord;
 varying vec3 normal;
 varying vec3 rotatedNormal;
 varying vec3 tangent;
+varying vec3 tangentMatrix;
 
 varying vec3 glvertex;
 varying vec3 playerPos;
@@ -34,7 +35,8 @@ void main() {
 	midcoord = step(mc_midTexCoord.xy, texcoord);
 	normal = gl_Normal;
 	rotatedNormal = gl_NormalMatrix * gl_Normal;
-	tangent = at_tangent.xyz;
+	tangent = normalize(at_tangent.xyz);
+	tangentMatrix = normalize(gl_NormalMatrix * at_tangent.xyz);
 	
 	glvertex = gl_Vertex.xyz;
 	playerPos = (gbufferModelViewInverse * (gl_ModelViewMatrix * gl_Vertex)).xyz;
