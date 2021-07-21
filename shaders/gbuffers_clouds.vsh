@@ -4,6 +4,7 @@ varying vec2 texcoord;
 varying vec4 glcolor;
 varying vec3 normal;
 varying vec3 rotatedNormal;
+varying vec3 glvertex;
 
 void main() {
 	gl_Position = ftransform();
@@ -11,4 +12,5 @@ void main() {
 	glcolor = gl_Color;
 	normal = gl_Normal;
 	rotatedNormal = normalize(gl_NormalMatrix * gl_Normal);
+	glvertex = gl_Vertex.xyz;
 }
