@@ -17,6 +17,10 @@ vec3 debug;
 	debug = tangent * 0.5 + 0.5;
 #elif GBUFFER_DEBUG == AT_TANGENTMATRIX
 	debug = tangentMatrix * 0.5 + 0.5;
+#elif GBUFFER_DEBUG == AT_VELOCITY
+	debug = velocity * 0.5 + 0.5;
+#elif GBUFFER_DEBUG == AT_MIDBLOCK
+	debug = midblock * 0.5 + 0.5;
 #elif GBUFFER_DEBUG == NUMERIC_ID
 	int id = ID_GETTER;
 	float blue = (id & 15) / 15.0;

@@ -24,6 +24,8 @@ varying vec3 normal;
 varying vec3 rotatedNormal;
 varying vec3 tangent;
 varying vec3 tangentMatrix;
+varying vec3 velocity;
+varying vec3 midblock;
 
 varying vec3 glvertex;
 varying vec3 playerPos;

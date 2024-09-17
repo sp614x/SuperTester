@@ -2,6 +2,8 @@
 
 attribute vec4 mc_Entity;
 attribute vec4 at_tangent;
+attribute vec4 at_velocity;
+attribute vec4 at_midBlock;
 attribute vec4 mc_midTexCoord;
 
 uniform mat4 gbufferModelView;
@@ -20,6 +22,8 @@ varying vec3 normal;
 varying vec3 rotatedNormal;
 varying vec3 tangent;
 varying vec3 tangentMatrix;
+varying vec3 velocity;
+varying vec3 midblock;
 
 varying vec3 glvertex;
 varying vec3 playerPos;
@@ -40,6 +44,8 @@ void main() {
 	rotatedNormal = gl_NormalMatrix * gl_Normal;
 	tangent = normalize(at_tangent.xyz);
 	tangentMatrix = normalize(gl_NormalMatrix * at_tangent.xyz);
+	velocity = at_velocity.xyz;
+	midblock = at_midBlock.xyz / 64.0;
 	mcentity = mc_Entity.x;
 	
 	glvertex = gl_Vertex.xyz;
