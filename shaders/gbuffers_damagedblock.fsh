@@ -4,7 +4,7 @@
 #include "/gbuffers_config.glsl"
 #define SHADOW_BIAS 0.00010 //Increase this if you get shadow acne. Decrease this if you get peter panning. [0.00000 0.00001 0.00002 0.00003 0.00004 0.00005 0.00006 0.00007 0.00008 0.00009 0.00010 0.00012 0.00014 0.00016 0.00018 0.00020 0.00022 0.00024 0.00026 0.00028 0.00030 0.00035 0.00040 0.00045 0.00050]
 #define PROGRAM_COLOR vec3(1.0, 0.0, 1.0)
-#define ID_GETTER mcentity;
+#define ID_GETTER int(floor(mcentity + 0.5))
 
 uniform sampler2D lightmap;
 uniform sampler2D normals;
