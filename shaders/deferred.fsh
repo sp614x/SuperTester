@@ -8,7 +8,9 @@
 #define SHADOWTEX1 5
 #define SHADOWCOLOR0 6
 #define SHADOWCOLOR1 7
-#define DEFERRED_DEBUG NOTHING //What to draw in deferred [NOTHING DEPTHTEX0 DEPTHTEX1 DEPTHTEX2 SHADOWTEX0 SHADOWTEX1 SHADOWCOLOR0 SHADOWCOLOR1]
+#define LIGHTMAP 8
+#define TEXTUREMAP 9
+#define DEFERRED_DEBUG NOTHING //What to draw in deferred [NOTHING DEPTHTEX0 DEPTHTEX1 DEPTHTEX2 SHADOWTEX0 SHADOWTEX1 SHADOWCOLOR0 SHADOWCOLOR1 LIGHTMAP TEXTUREMAP]
 
 uniform float far;
 uniform mat4 gbufferProjectionInverse;
@@ -20,6 +22,8 @@ uniform sampler2D shadowcolor0;
 uniform sampler2D shadowcolor1;
 uniform sampler2D shadowtex0;
 uniform sampler2D shadowtex1;
+uniform sampler2D colortex3;
+uniform sampler2D colortex4;
 
 varying vec2 texcoord;
 
@@ -53,6 +57,10 @@ void main() {
 		color = texture2D(shadowcolor0, texcoord).rgb;
 	#elif DEFERRED_DEBUG == SHADOWCOLOR1
 		color = texture2D(shadowcolor1, texcoord).rgb;
+	#elif DEFERRED_DEBUG == LIGHTMAP
+		color = texture2D(colortex3, texcoord).rgb;
+	#elif DEFERRED_DEBUG == TEXTUREMAP
+		color = texture2D(colortex4, texcoord).rgb;
 	#endif
 
 /* DRAWBUFFERS:0 */
