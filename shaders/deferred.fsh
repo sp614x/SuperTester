@@ -22,8 +22,7 @@ uniform sampler2D shadowcolor0;
 uniform sampler2D shadowcolor1;
 uniform sampler2D shadowtex0;
 uniform sampler2D shadowtex1;
-uniform sampler2D colortex3;
-uniform sampler2D colortex4;
+uniform sampler2D colortex1;
 
 varying vec2 texcoord;
 
@@ -58,9 +57,9 @@ void main() {
 	#elif DEFERRED_DEBUG == SHADOWCOLOR1
 		color = texture2D(shadowcolor1, texcoord).rgb;
 	#elif DEFERRED_DEBUG == LIGHTMAP
-		color = texture2D(colortex3, texcoord).rgb;
+		color = texture2D(colortex1, texcoord).rgb;
 	#elif DEFERRED_DEBUG == TEXTUREMAP
-		color = texture2D(colortex4, texcoord).rgb;
+		color = texture2D(colortex1, texcoord).rgb;
 	#endif
 
 /* DRAWBUFFERS:0 */

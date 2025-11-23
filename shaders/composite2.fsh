@@ -5,7 +5,7 @@
 varying vec2 texcoord;
 
 uniform sampler2D gcolor;
-uniform sampler2D colortex1;
+uniform sampler2D colortex2;
 
 void main()
 {
@@ -16,7 +16,7 @@ void main()
     if(texcoord.x < 0.3 && texcoord.y < 0.3)
     {
       vec2 tc = vec2(texcoord / 0.3);
-      color = texture2D(colortex1, vec2(tc.x, (1.0 - tc.y) * 0.61)).rgb;
+      color = texture2D(colortex2, vec2(tc.x, (1.0 - tc.y) * 0.61)).rgb;
     }
   #endif
 

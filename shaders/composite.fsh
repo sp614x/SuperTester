@@ -22,8 +22,7 @@ uniform sampler2D shadowcolor0;
 uniform sampler2D shadowcolor1;
 uniform sampler2D shadowtex0;
 uniform sampler2D shadowtex1;
-uniform sampler2D colortex3;
-uniform sampler2D colortex4;
+uniform sampler2D colortex1;
 
 uniform vec3 sunPosition;
 uniform vec3 moonPosition;
@@ -263,9 +262,9 @@ void main() {
 	#elif COMPOSITE_DEBUG == SHADOWCOLOR1
 		color = texture2D(shadowcolor1, texcoord).rgb;
 	#elif COMPOSITE_DEBUG == LIGHTMAP
-		color = texture2D(colortex3, texcoord).rgb;
+		color = texture2D(colortex1, texcoord).rgb;
 	#elif COMPOSITE_DEBUG == TEXTUREMAP
-		color = texture2D(colortex4, texcoord).rgb;
+		color = texture2D(colortex1, texcoord).rgb;
 	#elif COMPOSITE_DEBUG == UNIFORMS
 		color = texture2D(gcolor, texcoord).rgb;
 		color = uniformColor(color);
