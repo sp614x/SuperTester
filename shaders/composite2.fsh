@@ -9,8 +9,8 @@ uniform sampler2D colortex2;
 
 void main()
 {
-	vec3 color = texture2D(gcolor, texcoord).rgb;
-	
+  vec3 color = texture2D(gcolor, texcoord).rgb;
+  
   #if GBUFFER_DEBUG == PROGRAM_ID
     // Program ID legend
     if(texcoord.x < 0.3 && texcoord.y < 0.3)
@@ -21,5 +21,5 @@ void main()
   #endif
 
 /* DRAWBUFFERS:0 */
-	gl_FragData[0] = vec4(color, 1.0); //gcolor
+  gl_FragData[0] = vec4(color, 1.0); //gcolor
 }

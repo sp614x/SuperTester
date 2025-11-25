@@ -52,58 +52,58 @@ varying vec3 worldPos;
 varying vec4 glcolor;
 
 void main() {
-	vec4 color = texture2D(texture, texcoord) * glcolor;
-	vec3 debug;
-	
-	#if SHADOW_DEBUG == NOTHING
-		debug = color.rgb * texture2D(lightmap, lmcoord).rgb;
-	#elif SHADOW_DEBUG == LMCOORD
-		debug = vec3(lmcoord, 0.0);
-	#elif SHADOW_DEBUG == LIGHTMAP
-		debug = texture2D(lightmap, lmcoord).rgb;
-	#elif SHADOW_DEBUG == GLX_NORMAL
-		debug = normal * 0.5 + 0.5;
-	#elif SHADOW_DEBUG == GLX_NORMALMATRIX
-		debug = rotatedNormal * 0.5 + 0.5;
-	#elif SHADOW_DEBUG == MC_MIDTEXCOORD
-		debug = vec3(midcoord, 0.0);
-	#elif SHADOW_DEBUG == AT_TANGENT
-		debug = tangent * 0.5 + 0.5;
-	#elif SHADOW_DEBUG == NUMERIC_ID
-		int id = int(floor(mcentity + 0.5));
-		float blue = (id & 15) / 15.0;
-		id >>= 4;
-		float green = (id & 15) / 15.0;
-		id >>= 4;
-		float red = (id & 15) / 15.0;
-		debug = vec3(red, green, blue);
-	#elif SHADOW_DEBUG == GLX_COLOR
-		debug = glcolor.rgb;
-	#elif SHADOW_DEBUG == NORMALS_TEXTURE
-		debug = texture2D(normals, texcoord).rgb;
-	#elif SHADOW_DEBUG == SPECULAR_TEXTURE
-		debug = texture2D(specular, texcoord).rgb;
-	#elif SHADOW_DEBUG == GLX_VERTEX
-		debug = glvertex / 16.0;
-	#elif SHADOW_DEBUG == PLAYER_POS
-		debug = playerPos;
-	#elif SHADOW_DEBUG == WORLD_POS
-		debug = worldPos;
-	#elif SHADOW_DEBUG == VIEW_POS
-		debug = viewPos;
-	#elif SHADOW_DEBUG == SHADOW_VIEW_POS
-		debug = shadowViewPos;
-	#elif SHADOW_DEBUG == SHADOW_SAMPLE_POS
-		debug = shadowSamplePos;
-	#endif
-	
-	//don't include because apply_debug checks for GBUFFER_DEBUG, not SHADOW_DEBUG
-	#if SHADOW_DEBUG != NOTHING
-		float grayscale = dot(color.rgb, vec3(0.25, 0.5, 0.25));
-		color.rgb = mix(vec3(grayscale), debug, COLOR_WEIGHT);
-		color.a = mix(color.a, step(0.1, color.a), COLOR_WEIGHT);
-	#endif
+  vec4 color = texture2D(texture, texcoord) * glcolor;
+  vec3 debug;
+  
+  #if SHADOW_DEBUG == NOTHING
+    debug = color.rgb * texture2D(lightmap, lmcoord).rgb;
+  #elif SHADOW_DEBUG == LMCOORD
+    debug = vec3(lmcoord, 0.0);
+  #elif SHADOW_DEBUG == LIGHTMAP
+    debug = texture2D(lightmap, lmcoord).rgb;
+  #elif SHADOW_DEBUG == GLX_NORMAL
+    debug = normal * 0.5 + 0.5;
+  #elif SHADOW_DEBUG == GLX_NORMALMATRIX
+    debug = rotatedNormal * 0.5 + 0.5;
+  #elif SHADOW_DEBUG == MC_MIDTEXCOORD
+    debug = vec3(midcoord, 0.0);
+  #elif SHADOW_DEBUG == AT_TANGENT
+    debug = tangent * 0.5 + 0.5;
+  #elif SHADOW_DEBUG == NUMERIC_ID
+    int id = int(floor(mcentity + 0.5));
+    float blue = (id & 15) / 15.0;
+    id >>= 4;
+    float green = (id & 15) / 15.0;
+    id >>= 4;
+    float red = (id & 15) / 15.0;
+    debug = vec3(red, green, blue);
+  #elif SHADOW_DEBUG == GLX_COLOR
+    debug = glcolor.rgb;
+  #elif SHADOW_DEBUG == NORMALS_TEXTURE
+    debug = texture2D(normals, texcoord).rgb;
+  #elif SHADOW_DEBUG == SPECULAR_TEXTURE
+    debug = texture2D(specular, texcoord).rgb;
+  #elif SHADOW_DEBUG == GLX_VERTEX
+    debug = glvertex / 16.0;
+  #elif SHADOW_DEBUG == PLAYER_POS
+    debug = playerPos;
+  #elif SHADOW_DEBUG == WORLD_POS
+    debug = worldPos;
+  #elif SHADOW_DEBUG == VIEW_POS
+    debug = viewPos;
+  #elif SHADOW_DEBUG == SHADOW_VIEW_POS
+    debug = shadowViewPos;
+  #elif SHADOW_DEBUG == SHADOW_SAMPLE_POS
+    debug = shadowSamplePos;
+  #endif
+  
+  //don't include because apply_debug checks for GBUFFER_DEBUG, not SHADOW_DEBUG
+  #if SHADOW_DEBUG != NOTHING
+    float grayscale = dot(color.rgb, vec3(0.25, 0.5, 0.25));
+    color.rgb = mix(vec3(grayscale), debug, COLOR_WEIGHT);
+    color.a = mix(color.a, step(0.1, color.a), COLOR_WEIGHT);
+  #endif
 
-	gl_FragData[0] = color; //gcolor
-	gl_FragData[1] = vec4(color.rgb, step(0.99, color.a));
+  gl_FragData[0] = color; //gcolor
+  gl_FragData[1] = vec4(color.rgb, step(0.99, color.a));
 }

@@ -13,12 +13,12 @@ varying vec3 rotatedNormal;
 
 void main() {
     gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * vec4(gl_Vertex.xyz + modelOffset, 1.0);
-	glcolor = gl_Color;
-	glvertex = gl_Vertex.xyz;
+  glcolor = gl_Color;
+  glvertex = gl_Vertex.xyz;
 
-	#if MC_VERSION < 12102
-		texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
-		normal = gl_Normal;
-		rotatedNormal = normalize(gl_NormalMatrix * gl_Normal);
-	#endif
+  #if MC_VERSION < 12102
+    texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+    normal = gl_Normal;
+    rotatedNormal = normalize(gl_NormalMatrix * gl_Normal);
+  #endif
 }

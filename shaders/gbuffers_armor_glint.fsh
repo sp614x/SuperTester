@@ -11,17 +11,17 @@ varying vec2 texcoord;
 varying vec4 glcolor;
 
 void main() {
-	vec4 color = texture2D(texture, texcoord) * glcolor;
-	vec3 debug;
+  vec4 color = texture2D(texture, texcoord) * glcolor;
+  vec3 debug;
 
-	#if GBUFFER_DEBUG == PROGRAM_ID
-		debug = PROGRAM_COLOR;
-	#else
-		debug = color.rgb * texture2D(lightmap, lmcoord).rgb;
-	#endif
+  #if GBUFFER_DEBUG == PROGRAM_ID
+    debug = PROGRAM_COLOR;
+  #else
+    debug = color.rgb * texture2D(lightmap, lmcoord).rgb;
+  #endif
 
-	#include "/apply_debug.glsl"
+  #include "/apply_debug.glsl"
 
 /* DRAWBUFFERS:0 */
-	gl_FragData[0] = color; //gcolor
+  gl_FragData[0] = color; //gcolor
 }

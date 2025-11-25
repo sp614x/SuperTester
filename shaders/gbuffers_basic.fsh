@@ -7,21 +7,21 @@ varying vec4 glcolor;
 varying vec3 glvertex;
 
 void main() {
-	vec4 color = glcolor;
+  vec4 color = glcolor;
 
-	#if GBUFFER_DEBUG == PROGRAM_ID
-		vec3 debug = PROGRAM_COLOR;
-		#include "/apply_debug.glsl"
-	#endif
-	#if GBUFFER_DEBUG == GLX_COLOR
-		vec3 debug = glcolor.rgb;
-		#include "/apply_debug.glsl"
-	#endif
-	#if GBUFFER_DEBUG == GLX_VERTEX
-		vec3 debug = glvertex / 16.0;
-		#include "/apply_debug.glsl"
-	#endif
+  #if GBUFFER_DEBUG == PROGRAM_ID
+    vec3 debug = PROGRAM_COLOR;
+    #include "/apply_debug.glsl"
+  #endif
+  #if GBUFFER_DEBUG == GLX_COLOR
+    vec3 debug = glcolor.rgb;
+    #include "/apply_debug.glsl"
+  #endif
+  #if GBUFFER_DEBUG == GLX_VERTEX
+    vec3 debug = glvertex / 16.0;
+    #include "/apply_debug.glsl"
+  #endif
 
 /* DRAWBUFFERS:0 */
-	gl_FragData[0] = color; //gcolor
+  gl_FragData[0] = color; //gcolor
 }

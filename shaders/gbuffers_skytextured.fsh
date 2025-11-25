@@ -9,13 +9,13 @@ varying vec2 texcoord;
 varying vec4 glcolor;
 
 void main() {
-	vec4 color = texture2D(texture, texcoord) * glcolor;
+  vec4 color = texture2D(texture, texcoord) * glcolor;
 
-	#if GBUFFER_DEBUG == PROGRAM_ID
-		vec3 debug = PROGRAM_COLOR;
-		#include "/apply_debug.glsl"
-	#endif
+  #if GBUFFER_DEBUG == PROGRAM_ID
+    vec3 debug = PROGRAM_COLOR;
+    #include "/apply_debug.glsl"
+  #endif
 
 /* DRAWBUFFERS:0 */
-	gl_FragData[0] = color; //gcolor
+  gl_FragData[0] = color; //gcolor
 }

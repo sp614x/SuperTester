@@ -40,8 +40,8 @@ const int shadowMapResolution = 2048; //Resolution of the shadow map [256 512 10
 const float sunPathRotation = 0.0; //Changes the path of the sun overhead [-45.0 -40.0 -35.0 -30.0 -25.0 -20.0 -15.0 -10.0 -5.0 0.0 5.0 10.0 15.0 20.0 25.0 30.0 35.0 40.0 45.0]
 
 void main() {
-	#include "/gbuffers_common.glsl"
+  #include "/gbuffers_common.glsl"
 
 /* DRAWBUFFERS:0 */
-	gl_FragData[0] = color; //gcolor
+  gl_FragData[0] = color; //gcolor
 }

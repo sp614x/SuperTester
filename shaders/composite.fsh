@@ -47,14 +47,14 @@ uniform mat4 projectionMatrixInverse;
 varying vec2 texcoord;
 
 float getDepth(sampler2D sampler) {
-	return texture2D(sampler, texcoord).r;
+  return texture2D(sampler, texcoord).r;
 }
 
 float getDist(sampler2D sampler) {
-	vec3 pos = vec3(texcoord, getDepth(sampler));
-	vec4 tmp = gbufferProjectionInverse * vec4(pos * 2.0 - 1.0, 1.0);
-	pos = tmp.xyz / tmp.w;
-	return length(pos) / far;
+  vec3 pos = vec3(texcoord, getDepth(sampler));
+  vec4 tmp = gbufferProjectionInverse * vec4(pos * 2.0 - 1.0, 1.0);
+  pos = tmp.xyz / tmp.w;
+  return length(pos) / far;
 }
 
 bool between(float val, float min, float max)
@@ -73,7 +73,7 @@ float floatCol(float val)
   int exp;
   // Significand (0.5 - 1.0)
   float sig = frexp(val, exp);
-	// Sign
+  // Sign
   float r = (sign(val) + 1.0) / 2.0;
   // Significand
   float g = (abs(sig) - 0.5) * 2.0;
@@ -90,8 +90,8 @@ vec3 uniformColorVec3(vec3 vec, vec2 tc, vec2 mins, vec2 maxs)
   //
   for(int x = 0; x < 4; x++)
   {
-	  if(between(tc, mins + vec2(x * dx, 0.0), vec2((x + 1.0) * dx, dy)))
-	    return floatCol(vec[x]);
+    if(between(tc, mins + vec2(x * dx, 0.0), vec2((x + 1.0) * dx, dy)))
+      return floatCol(vec[x]);
   }
   //
   return vec3(1.0, 1.0, 1.0);
@@ -104,11 +104,11 @@ vec3 uniformColorMat3(mat3 mx, vec2 tc, vec2 mins, vec2 maxs)
   //
   for(int x = 0; x < 3; x++)
   {
-	  for(int y = 0; y < 3; y++)
-	  {
-		  if(between(tc, mins + vec2(x * dx, y * dy), vec2((x + 1.0) * dx, (y + 1.0) * dy)))
-		    return floatCol(mx[x][y]);
-	  }
+    for(int y = 0; y < 3; y++)
+    {
+      if(between(tc, mins + vec2(x * dx, y * dy), vec2((x + 1.0) * dx, (y + 1.0) * dy)))
+        return floatCol(mx[x][y]);
+    }
   }
   //
   return vec3(1.0, 1.0, 1.0);
@@ -122,12 +122,12 @@ vec3 uniformColorMat4(mat4 mx, vec2 tc, vec2 mins, vec2 maxs)
   //
   for(int x = 0; x < 4; x++)
   {
-	  for(int y = 0; y < 4; y++)
-	  {
-	    vec2 xy = vec2(x, y);
-		  if(between(tc, mins + dxy * xy, mins + dxy * (xy + 1)))
-		    return floatCol(mx[x][y]);
-	  }
+    for(int y = 0; y < 4; y++)
+    {
+      vec2 xy = vec2(x, y);
+      if(between(tc, mins + dxy * xy, mins + dxy * (xy + 1)))
+        return floatCol(mx[x][y]);
+    }
   }
   //
   return vec3(0.0, 0.0, 0.0);
@@ -135,36 +135,36 @@ vec3 uniformColorMat4(mat4 mx, vec2 tc, vec2 mins, vec2 maxs)
 
 bool checkUniformColorVec3(vec3 vec, vec2 tc, out vec2 rc, vec2 dc, float dx, out vec3 color)
 {
-	// Check
-	if(!between(tc, rc, rc + dc))
-	{
-	  // Next
-  	rc.x = rc.x + dc.x + dx;
-	  return false;
+  // Check
+  if(!between(tc, rc, rc + dc))
+  {
+    // Next
+    rc.x = rc.x + dc.x + dx;
+    return false;
   }
-	// Get
-	color = uniformColorVec3(vec, tc, rc, rc + dc);
+  // Get
+  color = uniformColorVec3(vec, tc, rc, rc + dc);
   // Next
-	rc.x = rc.x + dc.x + dx;
-	// Done
-	return true;
+  rc.x = rc.x + dc.x + dx;
+  // Done
+  return true;
 } 
 
 bool checkUniformColorMat4(mat4 mx, vec2 tc, out vec2 rc, vec2 dc, float dx, out vec3 color)
 {
-	// Check
-	if(!between(tc, rc, rc + dc))
-	{
-	  // Next
-  	rc.x = rc.x + dc.x + dx;
-	  return false;
+  // Check
+  if(!between(tc, rc, rc + dc))
+  {
+    // Next
+    rc.x = rc.x + dc.x + dx;
+    return false;
   }
-	// Get
-	color = uniformColorMat4(mx, tc, rc, rc + dc);
+  // Get
+  color = uniformColorMat4(mx, tc, rc, rc + dc);
   // Next
-	rc.x = rc.x + dc.x + dx;
-	// Done
-	return true;
+  rc.x = rc.x + dc.x + dx;
+  // Done
+  return true;
 } 
 
 vec3 uniformColor(vec3 colDef)
@@ -243,33 +243,33 @@ vec3 uniformColor(vec3 colDef)
 }
 
 void main() {
-	vec3 color;
-	
-	#if COMPOSITE_DEBUG == NOTHING
-		color = texture2D(gcolor, texcoord).rgb;
-	#elif COMPOSITE_DEBUG == DEPTHTEX0
-		color = vec3(getDist(depthtex0));
-	#elif COMPOSITE_DEBUG == DEPTHTEX1
-		color = vec3(getDist(depthtex1));
-	#elif COMPOSITE_DEBUG == DEPTHTEX2
-		color = vec3(getDist(depthtex2));
-	#elif COMPOSITE_DEBUG == SHADOWTEX0
-		color = vec3(getDepth(shadowtex0));
-	#elif COMPOSITE_DEBUG == SHADOWTEX1
-		color = vec3(getDepth(shadowtex1));
-	#elif COMPOSITE_DEBUG == SHADOWCOLOR0
-		color = texture2D(shadowcolor0, texcoord).rgb;
-	#elif COMPOSITE_DEBUG == SHADOWCOLOR1
-		color = texture2D(shadowcolor1, texcoord).rgb;
-	#elif COMPOSITE_DEBUG == LIGHTMAP
-		color = texture2D(colortex1, texcoord).rgb;
-	#elif COMPOSITE_DEBUG == TEXTUREMAP
-		color = texture2D(colortex1, texcoord).rgb;
-	#elif COMPOSITE_DEBUG == UNIFORMS
-		color = texture2D(gcolor, texcoord).rgb;
-		color = uniformColor(color);
-	#endif
+  vec3 color;
+  
+  #if COMPOSITE_DEBUG == NOTHING
+    color = texture2D(gcolor, texcoord).rgb;
+  #elif COMPOSITE_DEBUG == DEPTHTEX0
+    color = vec3(getDist(depthtex0));
+  #elif COMPOSITE_DEBUG == DEPTHTEX1
+    color = vec3(getDist(depthtex1));
+  #elif COMPOSITE_DEBUG == DEPTHTEX2
+    color = vec3(getDist(depthtex2));
+  #elif COMPOSITE_DEBUG == SHADOWTEX0
+    color = vec3(getDepth(shadowtex0));
+  #elif COMPOSITE_DEBUG == SHADOWTEX1
+    color = vec3(getDepth(shadowtex1));
+  #elif COMPOSITE_DEBUG == SHADOWCOLOR0
+    color = texture2D(shadowcolor0, texcoord).rgb;
+  #elif COMPOSITE_DEBUG == SHADOWCOLOR1
+    color = texture2D(shadowcolor1, texcoord).rgb;
+  #elif COMPOSITE_DEBUG == LIGHTMAP
+    color = texture2D(colortex1, texcoord).rgb;
+  #elif COMPOSITE_DEBUG == TEXTUREMAP
+    color = texture2D(colortex1, texcoord).rgb;
+  #elif COMPOSITE_DEBUG == UNIFORMS
+    color = texture2D(gcolor, texcoord).rgb;
+    color = uniformColor(color);
+  #endif
 
 /* DRAWBUFFERS:0 */
-	gl_FragData[0] = vec4(color, 1.0); //gcolor
+  gl_FragData[0] = vec4(color, 1.0); //gcolor
 }
