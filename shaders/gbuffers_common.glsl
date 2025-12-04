@@ -3,6 +3,8 @@ vec3 debug;
 
 #if GBUFFER_DEBUG == NOTHING
   debug = color.rgb * texture2D(lightmap, lmcoord).rgb;
+#elif GBUFFER_DEBUG == TEXTURE
+  debug = color.rgb;
 #elif GBUFFER_DEBUG == LMCOORD
   debug = vec3(lmcoord, 0.0);
 #elif GBUFFER_DEBUG == LIGHTMAP
