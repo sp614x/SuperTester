@@ -1,4 +1,5 @@
 #version 120
+#extension GL_ARB_gpu_shader5 : enable
 
 #define NOTHING 0
 #define DEPTHTEX0 1
@@ -67,7 +68,7 @@ bool between(vec2 vals, vec2 mins, vec2 maxs)
   return between(vals.x, mins.x, maxs.x) && between(vals.y, mins.y, maxs.y);
 } 
 
-float floatCol(float val)
+vec3 floatCol(float val)
 {
   // The exponent is returned in this output parameter
   int exp;
@@ -133,7 +134,7 @@ vec3 uniformColorMat4(mat4 mx, vec2 tc, vec2 mins, vec2 maxs)
   return vec3(0.0, 0.0, 0.0);
 }
 
-bool checkUniformColorVec3(vec3 vec, vec2 tc, out vec2 rc, vec2 dc, float dx, out vec3 color)
+bool checkUniformColorVec3(vec3 vec, vec2 tc, inout vec2 rc, vec2 dc, float dx, out vec3 color)
 {
   // Check
   if(!between(tc, rc, rc + dc))
@@ -150,7 +151,7 @@ bool checkUniformColorVec3(vec3 vec, vec2 tc, out vec2 rc, vec2 dc, float dx, ou
   return true;
 } 
 
-bool checkUniformColorMat4(mat4 mx, vec2 tc, out vec2 rc, vec2 dc, float dx, out vec3 color)
+bool checkUniformColorMat4(mat4 mx, vec2 tc, inout vec2 rc, vec2 dc, float dx, out vec3 color)
 {
   // Check
   if(!between(tc, rc, rc + dc))
