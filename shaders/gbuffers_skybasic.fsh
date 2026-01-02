@@ -34,6 +34,12 @@ vec3 calcSkyColor(vec3 pos) {
   return mix(skyColor, fogColor, fogify(max(upDot, 0.0), 0.25));
 }
 
+vec3 mixSkyColor(float val)
+{
+  float inv = 1.0 - val; 
+  return vec3(inv * 0.4, inv * 0.4, val * 0.5) + 0.5;
+}
+
 void main() {
   vec4 tmp = gbufferProjectionInverse * vec4(gl_FragCoord.xy / vec2(viewWidth, viewHeight) * 2.0 - 1.0, 1.0, 1.0);
   vec3 viewPos = normalize(tmp.xyz);
@@ -44,11 +50,11 @@ void main() {
   #if SKYBASIC_DEBUG == NOTHING
     debug = color;
   #elif SKYBASIC_DEBUG == SUN_POSITION
-    debug = vec3(fract(log2(dot(viewPos, normalize(sunPosition)) * -0.5 + 0.5)));
+    debug = mixSkyColor(fract(log2(dot(viewPos, normalize(sunPosition)) * -0.5 + 0.5)));
   #elif SKYBASIC_DEBUG == MOON_POSITION
-    debug = vec3(fract(log2(dot(viewPos, normalize(moonPosition)) * -0.5 + 0.5)));
+    debug = mixSkyColor(fract(log2(dot(viewPos, normalize(moonPosition)) * -0.5 + 0.5)));
   #elif SKYBASIC_DEBUG == UP_POSITION
-    debug = vec3(fract(log2(dot(viewPos, normalize(upPosition)) * -0.5 + 0.5)));
+    debug = mixSkyColor(fract(log2(dot(viewPos, normalize(upPosition)) * -0.5 + 0.5)));
   #elif SKYBASIC_DEBUG == VIEW_POS
     viewPos = abs(viewPos);
     debug = viewPos / (viewPos.x + viewPos.y + viewPos.z);
