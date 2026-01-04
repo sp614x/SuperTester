@@ -9,11 +9,13 @@
 #define SHADOWCOLOR0 6
 #define SHADOWCOLOR1 7
 #define LIGHTMAP 8
-#define TEXTUREMAP 9
-#define DEFERRED_DEBUG NOTHING //What to draw in deferred [NOTHING DEPTHTEX0 DEPTHTEX1 DEPTHTEX2 SHADOWTEX0 SHADOWTEX1 SHADOWCOLOR0 SHADOWCOLOR1 LIGHTMAP TEXTUREMAP]
+#define TEXTURE_ATLAS 9
+#define NORMALS_ATLAS 10
+#define SPECULAR_ATLAS 11
+#define UNIFORMS 12
+#define DEFERRED_DEBUG NOTHING //What to draw in deferred [NOTHING DEPTHTEX0 DEPTHTEX1 DEPTHTEX2 SHADOWTEX0 SHADOWTEX1 SHADOWCOLOR0 SHADOWCOLOR1 LIGHTMAP TEXTURE_ATLAS NORMALS_ATLAS SPECULAR_ATLAS UNIFORMS]
 
 uniform float far;
-uniform mat4 gbufferProjectionInverse;
 uniform sampler2D depthtex0;
 uniform sampler2D depthtex1;
 uniform sampler2D depthtex2;
@@ -24,20 +26,32 @@ uniform sampler2D shadowtex0;
 uniform sampler2D shadowtex1;
 uniform sampler2D colortex1;
 
+uniform vec3 sunPosition;
+uniform vec3 moonPosition;
+uniform vec3 shadowLightPosition;
+uniform vec3 upPosition;
+uniform vec3 cameraPosition;
+uniform vec3 previousCameraPosition;
+
+uniform mat4 gbufferModelView;
+uniform mat4 gbufferModelViewInverse;
+uniform mat4 gbufferPreviousModelView;
+uniform mat4 gbufferProjection;
+uniform mat4 gbufferProjectionInverse;
+uniform mat4 gbufferPreviousProjection;
+uniform mat4 shadowProjection;
+uniform mat4 shadowProjectionInverse;
+uniform mat4 shadowModelView;
+uniform mat4 shadowModelViewInverse;
+uniform mat4 projectionMatrix;
+uniform mat4 projectionMatrixInverse;
+
 varying vec2 texcoord;
 
-float getDepth(sampler2D sampler) {
-  return texture2D(sampler, texcoord).r;
-}
+#include "/composite_common.glsl"
 
-float getDist(sampler2D sampler) {
-  vec3 pos = vec3(texcoord, getDepth(sampler));
-  vec4 tmp = gbufferProjectionInverse * vec4(pos * 2.0 - 1.0, 1.0);
-  pos = tmp.xyz / tmp.w;
-  return length(pos) / far;
-}
-
-void main() {
+void main()
+{
   vec3 color;
   
   #if DEFERRED_DEBUG == NOTHING
@@ -57,9 +71,16 @@ void main() {
   #elif DEFERRED_DEBUG == SHADOWCOLOR1
     color = texture2D(shadowcolor1, texcoord).rgb;
   #elif DEFERRED_DEBUG == LIGHTMAP
-    color = texture2D(colortex1, texcoord).rgb;
-  #elif DEFERRED_DEBUG == TEXTUREMAP
-    color = texture2D(colortex1, texcoord).rgb;
+    color = texture2D(colortex1, vec2(texcoord.x, 1.0 - texcoord.y)).rgb;
+  #elif DEFERRED_DEBUG == ATLAS
+    color = texture2D(colortex1, vec2(texcoord.x, 1.0 - texcoord.y)).rgb;
+  #elif DEFERRED_DEBUG == NORMALS_ATLAS
+    color = texture2D(colortex1, vec2(texcoord.x, 1.0 - texcoord.y)).rgb;
+  #elif DEFERRED_DEBUG == SPECULAR_ATLAS
+    color = texture2D(colortex1, vec2(texcoord.x, 1.0 - texcoord.y)).rgb;
+  #elif DEFERRED_DEBUG == UNIFORMS
+    color = texture2D(gcolor, texcoord).rgb;
+    color = uniformColor(color);
   #endif
 
 /* DRAWBUFFERS:0 */
