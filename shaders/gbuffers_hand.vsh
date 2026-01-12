@@ -28,6 +28,7 @@ varying vec3 shadowSamplePos;
 varying vec3 shadowViewPos;
 varying vec3 viewPos;
 varying vec3 worldPos;
+varying float glPosX;
 
 varying vec4 glcolor;
 
@@ -48,6 +49,7 @@ void main() {
   playerPos = (gbufferModelViewInverse * (gl_ModelViewMatrix * gl_Vertex)).xyz;
   viewPos = (gbufferModelView * vec4(playerPos, 1.0)).xyz;
   worldPos = playerPos + cameraPosition;
+  glPosX = gl_Position.x;
 
   shadowViewPos = (shadowModelView * vec4(playerPos, 1.0)).xyz;
   shadowSamplePos = (shadowProjection * vec4(shadowViewPos, 1.0)).xyz * 0.5 + 0.5;
