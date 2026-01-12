@@ -1,4 +1,3 @@
-#extension GL_ARB_gpu_shader5 : enable
 
 float getDepth(sampler2D sampler)
 {
@@ -23,30 +22,53 @@ bool between(vec2 vals, vec2 mins, vec2 maxs)
   return between(vals.x, mins.x, maxs.x) && between(vals.y, mins.y, maxs.y);
 } 
 
+float symLog(float x, float threshold)
+ {
+    // Values smaller than threshold are treated linearly
+    return sign(x) * log2(1.0 + abs(x) / threshold);
+}
+
+float symQuant(float val, float step)
+{
+  return trunc(val / step) * step;
+}
+
+float symFract(float val)
+{
+  return val - trunc(val);
+}
+
 vec3 floatCol(float val)
 {
-  // The exponent is returned in this output parameter
-  int exp;
-  // Significand (0.5 - 1.0)
-  float sig = frexp(val, exp);
-  // Sign
-  float r = (sign(val) + 1.0) / 2.0;
-  // Significand
-  float g = (abs(sig) - 0.5) * 2.0;
-  // Exponent
-  float b = clamp((exp + 10) / 20.0, 0.0, 1.0);
+  // Log space (1e4 => 25.0, 1e-4 -> 0.4) 
+  val = symLog(val, 0.0003);
+  // Quant
+  float step = 5.0;
+  float mul = step / (step - 1);
+  // Frac (-1.0 : 1.0)
+  float valFrac = symFract(val);
+  val = trunc(val) / step;
+  // Frac2 (-1.0 : 1.0)
+  float valFrac2 = symFract(val) * mul;
+  val = trunc(val) / step;
+  // Frac3 (-1.0 : 1.0)
+  float valFrac3 = symFract(val) * mul;
+  // Normalize (0.0 : 1.0)
+  float r = valFrac / 2.0 + 0.5;
+  float g = valFrac2 / 2.0 + 0.5;
+  float b = valFrac3 / 2.0 + 0.5;
   // Col
   return vec3(r, g, b);
 }
 
 vec3 uniformColorVec3(vec3 vec, vec2 tc, vec2 mins, vec2 maxs)
 {
-  float dx = (maxs.x - mins.x) / 3;
-  float dy = (maxs.y - mins.y) / 1;
+  vec2 dxy = (maxs - mins) / vec2(3, 1);
   //
   for(int x = 0; x < 4; x++)
   {
-    if(between(tc, mins + vec2(x * dx, 0.0), vec2((x + 1.0) * dx, dy)))
+    vec2 xy = vec2(x, 0);
+    if(between(tc, mins + dxy * xy, mins + dxy * (xy + 1)))
       return floatCol(vec[x]);
   }
   //
@@ -55,14 +77,14 @@ vec3 uniformColorVec3(vec3 vec, vec2 tc, vec2 mins, vec2 maxs)
 
 vec3 uniformColorMat3(mat3 mx, vec2 tc, vec2 mins, vec2 maxs)
 {
-  float dx = (maxs.x - mins.x) / 3;
-  float dy = (maxs.y - mins.y) / 3;
+  vec2 dxy = (maxs - mins) / 3.0;
   //
   for(int x = 0; x < 3; x++)
   {
     for(int y = 0; y < 3; y++)
     {
-      if(between(tc, mins + vec2(x * dx, y * dy), vec2((x + 1.0) * dx, (y + 1.0) * dy)))
+      vec2 xy = vec2(x, y);
+      if(between(tc, mins + dxy * xy, mins + dxy * (xy + 1)))
         return floatCol(mx[x][y]);
     }
   }
@@ -72,9 +94,7 @@ vec3 uniformColorMat3(mat3 mx, vec2 tc, vec2 mins, vec2 maxs)
 
 vec3 uniformColorMat4(mat4 mx, vec2 tc, vec2 mins, vec2 maxs)
 {
-  float dx = (maxs.x - mins.x) / 4;
-  float dy = (maxs.y - mins.y) / 4;
-  vec2 dxy = vec2(dx, dy);
+  vec2 dxy = (maxs - mins) / 4.0;
   //
   for(int x = 0; x < 4; x++)
   {
@@ -125,12 +145,20 @@ bool checkUniformColorMat4(mat4 mx, vec2 tc, inout vec2 rc, vec2 dc, float dx, o
 
 vec3 uniformColor(vec3 colDef)
 {
+  // Tex
   vec2 tc = vec2(texcoord.x, 1.0 - texcoord.y);
+  // Start
+  float sx = 0.05;
+  float sy = 0.05;
+  // Delta
   float dx = 0.05;
   float dy = 0.05;
-  vec2 rc = vec2(0.0, 0.0);
+  // Rect
+  vec2 rc = vec2(sx, sy);
   vec2 dc = vec2(0.1, 0.1);
+  // Color
   vec3 color = colDef;
+  // Row 1
   // Sun
   if(checkUniformColorVec3(sunPosition, tc, rc, dc, dx, color))
     return color;
@@ -149,8 +177,8 @@ vec3 uniformColor(vec3 colDef)
   // Previous camera
   if(checkUniformColorVec3(previousCameraPosition, tc, rc, dc, dx, color))
     return color;
-  // Next line
-  rc.x = 0.0;
+  // Row 2
+  rc.x = sx;
   rc.y = rc.y + dc.y + dy;
   // Gbuffer modelview
   if(checkUniformColorMat4(gbufferModelView, tc, rc, dc, dx, color))
@@ -170,8 +198,8 @@ vec3 uniformColor(vec3 colDef)
   // Gbuffer projection inverse
   if(checkUniformColorMat4(gbufferProjectionInverse, tc, rc, dc, dx, color))
     return color;
-  // Next line
-  rc.x = 0.0;
+  // Row 3
+  rc.x = sx;
   rc.y = rc.y + dc.y + dy;
   // Shadow modelview
   if(checkUniformColorMat4(shadowModelView, tc, rc, dc, dx, color))
@@ -185,8 +213,8 @@ vec3 uniformColor(vec3 colDef)
   // Shadow projection inverse
   if(checkUniformColorMat4(shadowProjectionInverse, tc, rc, dc, dx, color))
     return color;
-  // Next line
-  rc.x = 0.0;
+  // Row 4
+  rc.x = sx;
   rc.y = rc.y + dc.y + dy;
   // Projection matrix
   if(checkUniformColorMat4(projectionMatrix, tc, rc, dc, dx, color))
