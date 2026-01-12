@@ -25,12 +25,7 @@ vec3 debug;
   debug = midblock * 0.5 + 0.5;
 #elif GBUFFER_DEBUG == NUMERIC_ID
   int id = ID_GETTER;
-  float blue = (id & 15) / 15.0;
-  id >>= 4;
-  float green = (id & 15) / 15.0;
-  id >>= 4;
-  float red = (id & 15) / 15.0;
-  debug = vec3(red, green, blue);
+  debug = mixVec3(id);
 #elif GBUFFER_DEBUG == GLX_COLOR
   debug = glcolor.rgb;
 #elif GBUFFER_DEBUG == NORMALS_TEXTURE
