@@ -13,7 +13,7 @@ varying vec3 rotatedNormal;
 
 void main()
 {
-    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * vec4(gl_Vertex.xyz + modelOffset, 1.0);
+  gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * vec4(gl_Vertex.xyz + modelOffset, 1.0);
   glcolor = gl_Color;
   glvertex = gl_Vertex.xyz;
 
