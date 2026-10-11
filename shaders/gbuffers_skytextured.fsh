@@ -8,7 +8,8 @@ uniform sampler2D texture;
 varying vec2 texcoord;
 varying vec4 glcolor;
 
-void main() {
+void main()
+{
   vec4 color = texture2D(texture, texcoord) * glcolor;
 
   #if GBUFFER_DEBUG == PROGRAM_ID

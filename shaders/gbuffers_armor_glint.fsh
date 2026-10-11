@@ -10,7 +10,8 @@ varying vec2 lmcoord;
 varying vec2 texcoord;
 varying vec4 glcolor;
 
-void main() {
+void main()
+{
   vec4 color = texture2D(texture, texcoord) * glcolor;
   vec3 debug;
 

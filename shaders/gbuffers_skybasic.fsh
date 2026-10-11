@@ -40,7 +40,8 @@ vec3 mixSkyColor(float val)
   return vec3(inv * 0.4, inv * 0.4, val * 0.5) + 0.5;
 }
 
-void main() {
+void main()
+{
   vec4 tmp = gbufferProjectionInverse * vec4(gl_FragCoord.xy / vec2(viewWidth, viewHeight) * 2.0 - 1.0, 1.0, 1.0);
   vec3 viewPos = normalize(tmp.xyz);
 

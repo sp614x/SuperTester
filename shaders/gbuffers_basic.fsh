@@ -6,7 +6,8 @@
 varying vec4 glcolor;
 varying vec3 glvertex;
 
-void main() {
+void main()
+{
   vec4 color = glcolor;
 
   #if GBUFFER_DEBUG == PROGRAM_ID

@@ -39,7 +39,8 @@ const float shadowDistance = 32.0; //Distance to draw shadows [16.0 32.0 64.0 12
 const int shadowMapResolution = 2048; //Resolution of the shadow map [256 512 1024 2048 4096 8192]
 const float sunPathRotation = 0.0; //Changes the path of the sun overhead [-45.0 -40.0 -35.0 -30.0 -25.0 -20.0 -15.0 -10.0 -5.0 0.0 5.0 10.0 15.0 20.0 25.0 30.0 35.0 40.0 45.0]
 
-void main() {
+void main()
+{
   #include "/gbuffers_common.glsl"
 
 /* DRAWBUFFERS:0 */

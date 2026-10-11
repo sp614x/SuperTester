@@ -14,7 +14,8 @@ varying vec3 normal;
 varying vec3 rotatedNormal;
 #endif
 
-void main() {
+void main()
+{
 
   #if MC_VERSION < 12102
     vec4 color = texture2D(texture, texcoord) * glcolor;

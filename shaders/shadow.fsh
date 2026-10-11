@@ -51,7 +51,8 @@ varying vec3 worldPos;
 
 varying vec4 glcolor;
 
-void main() {
+void main()
+{
   vec4 color = texture2D(texture, texcoord) * glcolor;
   vec3 debug;
   
