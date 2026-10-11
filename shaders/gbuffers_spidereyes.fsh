@@ -6,8 +6,13 @@
 
 uniform sampler2D texture;
 
+#include "/extended_uniforms.glsl"
+
 varying vec2 texcoord;
 varying vec4 glcolor;
+
+// Color functions
+#include "/uniform_colors.glsl"
 
 void main()
 {
@@ -16,10 +21,15 @@ void main()
   #endif
 
   vec4 color = texture2D(texture, texcoord) * glcolor;
+  vec3 debug = color.rgb;
+  
   #if GBUFFER_DEBUG == PROGRAM_ID
-    vec3 debug = PROGRAM_COLOR;
-    #include "/apply_debug.glsl"
+    debug = PROGRAM_COLOR;
+  #elif GBUFFER_DEBUG == UNIFORMS
+    debug = uniformColor(debug).rgb;
   #endif
+
+  #include "/apply_debug.glsl"
 
 /* DRAWBUFFERS:0 */
   gl_FragData[0] = color; //gcolor

@@ -21,13 +21,16 @@
 #define VIEW_POS 17
 #define SHADOW_VIEW_POS 18
 #define SHADOW_SAMPLE_POS 19
-#define SHADOW_DEBUG NOTHING //What to draw in the shadow program [NOTHING LMCOORD LIGHTMAP GLX_NORMAL GLX_NORMALMATRIX MC_MIDTEXCOORD AT_TANGENT AT_TANGENTMATRIX AT_VELOCITY AT_MIDBLOCK NUMERIC_ID GLX_COLOR NORMALS_TEXTURE SPECULAR_TEXTURE GLX_VERTEX PLAYER_POS WORLD_POS VIEW_POS SHADOW_VIEW_POS SHADOW_SAMPLE_POS]  
+#define UNIFORMS 20
+#define SHADOW_DEBUG NOTHING //What to draw in the shadow program [NOTHING LMCOORD LIGHTMAP GLX_NORMAL GLX_NORMALMATRIX MC_MIDTEXCOORD AT_TANGENT AT_TANGENTMATRIX AT_VELOCITY AT_MIDBLOCK NUMERIC_ID GLX_COLOR NORMALS_TEXTURE SPECULAR_TEXTURE GLX_VERTEX PLAYER_POS WORLD_POS VIEW_POS SHADOW_VIEW_POS SHADOW_SAMPLE_POS UNIFORMS]
 #define COLOR_WEIGHT 0.75 //Mix level which combines the grayscale texture with the thing being debugged [0.0 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00]
 
 uniform sampler2D lightmap;
 uniform sampler2D normals;
 uniform sampler2D specular;
 uniform sampler2D texture;
+
+#include "/extended_uniforms.glsl"
 
 varying float mcentity;
 
@@ -50,6 +53,9 @@ varying vec3 viewPos;
 varying vec3 worldPos;
 
 varying vec4 glcolor;
+
+// Color functions
+#include "/uniform_colors.glsl"
 
 void main()
 {
@@ -96,6 +102,8 @@ void main()
     debug = shadowViewPos;
   #elif SHADOW_DEBUG == SHADOW_SAMPLE_POS
     debug = shadowSamplePos;
+  #elif SHADOW_DEBUG == UNIFORMS
+    debug = uniformColor(debug).rgb;
   #endif
   
   //don't include because apply_debug checks for GBUFFER_DEBUG, not SHADOW_DEBUG

@@ -15,7 +15,6 @@
 #define UNIFORMS 12
 #define COMPOSITE_DEBUG NOTHING //What to draw in deferred [NOTHING DEPTHTEX0 DEPTHTEX1 DEPTHTEX2 SHADOWTEX0 SHADOWTEX1 SHADOWCOLOR0 SHADOWCOLOR1 LIGHTMAP TEXTURE_ATLAS NORMALS_ATLAS SPECULAR_ATLAS UNIFORMS]
 
-uniform float far;
 uniform sampler2D depthtex0;
 uniform sampler2D depthtex1;
 uniform sampler2D depthtex2;
@@ -26,25 +25,7 @@ uniform sampler2D shadowtex0;
 uniform sampler2D shadowtex1;
 uniform sampler2D colortex1;
 
-uniform vec3 sunPosition;
-uniform vec3 moonPosition;
-uniform vec3 shadowLightPosition;
-uniform vec3 upPosition;
-uniform vec3 cameraPosition;
-uniform vec3 previousCameraPosition;
-
-uniform mat4 gbufferModelView;
-uniform mat4 gbufferModelViewInverse;
-uniform mat4 gbufferPreviousModelView;
-uniform mat4 gbufferProjection;
-uniform mat4 gbufferProjectionInverse;
-uniform mat4 gbufferPreviousProjection;
-uniform mat4 shadowProjection;
-uniform mat4 shadowProjectionInverse;
-uniform mat4 shadowModelView;
-uniform mat4 shadowModelViewInverse;
-uniform mat4 projectionMatrix;
-uniform mat4 projectionMatrixInverse;
+#include "/extended_uniforms.glsl"
 
 varying vec2 texcoord;
 

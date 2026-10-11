@@ -9,19 +9,17 @@ varying vec3 glvertex;
 void main()
 {
   vec4 color = glcolor;
+  vec3 debug = color.rgb;
 
   #if GBUFFER_DEBUG == PROGRAM_ID
-    vec3 debug = PROGRAM_COLOR;
-    #include "/apply_debug.glsl"
+    debug = PROGRAM_COLOR;
+  #elseif GBUFFER_DEBUG == GLX_COLOR
+    debug = glcolor.rgb;
+  #elseif GBUFFER_DEBUG == GLX_VERTEX
+    debug = glvertex / 16.0;
   #endif
-  #if GBUFFER_DEBUG == GLX_COLOR
-    vec3 debug = glcolor.rgb;
-    #include "/apply_debug.glsl"
-  #endif
-  #if GBUFFER_DEBUG == GLX_VERTEX
-    vec3 debug = glvertex / 16.0;
-    #include "/apply_debug.glsl"
-  #endif
+
+  #include "/apply_debug.glsl"
 
 /* DRAWBUFFERS:0 */
   gl_FragData[0] = color; //gcolor

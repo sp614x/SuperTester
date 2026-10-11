@@ -1,5 +1,5 @@
 vec4 color = texture2D(texture, texcoord) * glcolor;
-vec3 debug;
+vec3 debug = color.rgb;
 
 #if GBUFFER_DEBUG == NOTHING
   debug = color.rgb * texture2D(lightmap, lmcoord).rgb;
@@ -64,6 +64,10 @@ vec3 debug;
   }
 #elif GBUFFER_DEBUG == PROGRAM_ID
   debug = PROGRAM_COLOR;
+#elif GBUFFER_DEBUG == UNIFORMS
+  #ifdef EXTENDED_UNIFORMS
+    debug = uniformColor(debug).rgb;
+  #endif
 #endif
 
 #include "/apply_debug.glsl"
